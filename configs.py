@@ -1,4 +1,9 @@
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 BG_COLOUR = (44, 120, 76) #Dark Green
-PYTHON_ICON_FILE = 'python_icon.png'
+PYTHON_ICON_FILE = 'assets/pics/python_icon.png'
+SCORE_FILE = 'score.txt'
+FONT_NAME = None
+FONT_SIZE = 30
+RESET_SCORE_BUTTON_FILE = 'assets/pics/reset_score_button.png'
+CLICK_SOUND_EFFECT_FILE = 'assets/sound_effects/click_sound_effect.wav'
