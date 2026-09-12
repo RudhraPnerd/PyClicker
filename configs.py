@@ -1,0 +1,4 @@
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+BG_COLOUR = (44, 120, 76) #Dark Green
+PYTHON_ICON_FILE = 'python_icon.png'

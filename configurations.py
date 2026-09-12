@@ -1,1 +1,0 @@
-CLICK_PER_SEC = 1

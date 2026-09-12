@@ -1,31 +1,29 @@
-import time
-import colorama
-from colorama import init, Fore, Back, Style
-import keyboard
+import pygame
+import configs as cfg
 
-init(autoreset=True)
+pygame.init()
 
-score = 0
+screen = pygame.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
+pygame.display.set_caption('PyClicker')
 
-def update_score_display():
-    print(f"\r{Style.BRIGHT}Score: {score}", end="", flush=True)
+python_icon = pygame.image.load(cfg.PYTHON_ICON_FILE).convert_alpha()
 
-def increment_score():
-    global score
-    score += 1
-    update_score_display()
+python_icon = pygame.transform.scale(python_icon, (150, 150))
 
-print(Fore.BLUE + "PyClicker")
-print(Style.BRIGHT + "==============")
+img_rect = python_icon.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2))
 
+clock = pygame.time.Clock()
 
-update_score_display()
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
+    screen.fill(cfg.BG_COLOUR)
+    screen.blit(python_icon, img_rect)
+    pygame.display.flip()
 
-keyboard.add_hotkey("enter", increment_score)
+    clock.tick(60)
 
-
-print(f"\n{Style.DIM}(Press ENTER to click, or ESC to exit)")
-keyboard.wait("esc")
-
-print("\n\nThanks for playing!")
+pygame.quit()
