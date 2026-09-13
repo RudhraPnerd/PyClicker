@@ -1,3 +1,4 @@
+CLICK_POWER = 12
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 BG_COLOUR = (0, 0, 0)
@@ -16,3 +17,9 @@ DARK_MODE_BG_COLOUR = (48, 48, 47)
 DARK_LIGHT_MODE_TOGGLE_SOUND_EFFECT_FILE = 'assets/sound_effects/dark_light_mode_toggle.wav'
 POWER_BUTTON_FILE = 'assets/pics/power.png'
 POWER_OFF_SOUND_FILE = 'assets/sound_effects/power_off_sound.wav'
+STATE_SHUTTING_DOWN = 'shutting_down'
+STATE_GAME = 'game'
+YES_BUTTON_FILE = 'assets/pics/yes.png'
+NO_BUTTON_FILE = 'assets/pics/no.png'
+STATE_SHOP = 'shop'
+SHOPPING_BUTTON_FILE = 'assets/pics/shopping_trolley.png'
