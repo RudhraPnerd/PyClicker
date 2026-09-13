@@ -1,22 +1,22 @@
+import time
 import pygame
 import configs as cfg
 import score_func as sf
-import time
+import assets as ast
+import menus
 
 pygame.init()
 
 screen = pygame.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
 pygame.display.set_caption('PyClicker')
 
-import assets as ast
-import menus
-
 FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE)
 SCORE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 50)
 
 font_colour = pygame.Color('black')
 
-current_state = cfg.STATE_GAME
+current_state = cfg.STATE_HOME
+previous_state = cfg.STATE_HOME
 
 score = sf.read_score(cfg.SCORE_FILE)
 
@@ -34,8 +34,18 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 if current_state == cfg.STATE_GAME:
+                    previous_state = cfg.STATE_GAME
                     current_state = cfg.STATE_SHUTTING_DOWN
                 elif current_state == cfg.STATE_SHUTTING_DOWN:
+                    current_state = previous_state
+                elif current_state == cfg.STATE_SHOP:
+                    current_state = cfg.STATE_GAME
+                elif current_state == cfg.STATE_HOME:
+                    previous_state = cfg.STATE_HOME
+                    current_state = cfg.STATE_SHUTTING_DOWN
+
+            elif event.key == pygame.K_SPACE:
+                if current_state == cfg.STATE_HOME:
                     current_state = cfg.STATE_GAME
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -65,11 +75,16 @@ while running:
 
                 elif ast.power_img_rect.collidepoint(event.pos):
                     ast.toggle.play()
+                    previous_state = cfg.STATE_GAME
                     current_state = cfg.STATE_SHUTTING_DOWN
 
                 elif ast.shopping_img_rect.collidepoint(event.pos):
                     ast.toggle.play()
                     current_state = cfg.STATE_SHOP
+
+                elif ast.home_img_rect.collidepoint(event.pos):
+                    ast.toggle.play()
+                    current_state = cfg.STATE_HOME
 
             elif current_state == cfg.STATE_SHUTTING_DOWN:
                 if ast.yes_img_rect.collidepoint(event.pos):
@@ -78,9 +93,15 @@ while running:
                     running = False
                 elif ast.no_img_rect.collidepoint(event.pos):
                     ast.toggle.play()
+                    current_state = previous_state
+
+            elif current_state == cfg.STATE_HOME:
+                if ast.play_img_rect.collidepoint(event.pos):
+                    ast.toggle.play()
+                    time.sleep(1.5)
+                    ast.teleportation_sound.play()
+                    previous_state = cfg.STATE_HOME
                     current_state = cfg.STATE_GAME
-
-
 
     if light_mode:
         cfg.BG_COLOUR = cfg.LIGHT_MODE_BG_COLOUR
@@ -102,11 +123,15 @@ while running:
         screen.blit(ast.light_mode_toggle, ast.light_img_rect)
         screen.blit(ast.power_button, ast.power_img_rect)
         screen.blit(ast.shopping_button, ast.shopping_img_rect)
+        screen.blit(ast.home_button, ast.home_img_rect)
 
     elif current_state == cfg.STATE_SHUTTING_DOWN:
-        menus.draw_shutting_down_conformation(screen, FONT)
+        menus.draw_shutting_down_confirmation(screen, FONT)
+
+    elif current_state == cfg.STATE_HOME:
+        menus.draw_home(screen, FONT)
 
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(cfg.FPS)
 
 pygame.quit()

@@ -44,16 +44,27 @@ shopping_button = pygame.transform.scale(shopping_button, (80, 40))
 shopping_button = get_rounded_image(shopping_button, corner_radius=10)
 shopping_img_rect = shopping_button.get_rect(topleft=(120, 20))
 
+home_button = pygame.image.load(cfg.HOME_BUTTON_FILE).convert_alpha()
+home_button = pygame.transform.scale(home_button, (80, 40))
+home_button = get_rounded_image(home_button, corner_radius=10)
+home_img_rect = home_button.get_rect(topright=(cfg.SCREEN_WIDTH - 185, 20))
+
 # --- Shutdown Menu Buttons ---
 yes_button = pygame.image.load(cfg.YES_BUTTON_FILE).convert_alpha()
-yes_button = pygame.transform.scale(yes_button, (80, 40))
+yes_button = pygame.transform.scale(yes_button, (100, 100))
 yes_button = get_rounded_image(yes_button, corner_radius=10)
 yes_img_rect = yes_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 - 60, cfg.SCREEN_HEIGHT // 2 + 50))
 
 no_button = pygame.image.load(cfg.NO_BUTTON_FILE).convert_alpha()
-no_button = pygame.transform.scale(no_button, (80, 40))
+no_button = pygame.transform.scale(no_button, (100, 100))
 no_button = get_rounded_image(no_button, corner_radius=10)
 no_img_rect = no_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 + 60, cfg.SCREEN_HEIGHT // 2 + 50))
+
+# --- Home Menu Buttons ---
+play_button = pygame.image.load(cfg.PLAY_BUTTON_FILE).convert_alpha()
+play_button = pygame.transform.scale(play_button, (100, 100))
+play_button = get_rounded_image(play_button, corner_radius=10)
+play_img_rect = play_button.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2))
 
 # --- Audio Assets ---
 click_sound = pygame.mixer.Sound(cfg.CLICK_SOUND_EFFECT_FILE)
@@ -61,3 +72,4 @@ reset_sound = pygame.mixer.Sound(cfg.RESET_SOUND_EFFECT_FILE)
 one_hundred_score_mark = pygame.mixer.Sound(cfg.ONE_HUNDRED_SCORE_MARK_FILE)
 toggle = pygame.mixer.Sound(cfg.DARK_LIGHT_MODE_TOGGLE_SOUND_EFFECT_FILE)
 power_off = pygame.mixer.Sound(cfg.POWER_OFF_SOUND_FILE)
+teleportation_sound = pygame.mixer.Sound(cfg.TELEPORTATION_SOUND_EFFECT_FILE)
