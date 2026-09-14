@@ -2,6 +2,8 @@
 
 PyClicker is a clean, modular desktop clicker game built using Python and Pygame. It features score tracking, persistence, light/dark mode toggling, custom rounded image borders, and sound effects.
 
+
+
 ---
 
 ## Features

@@ -2,17 +2,20 @@ import time
 import pygame
 import configs as cfg
 import score_func as sf
-import assets as ast
-import menus
 
+# Initialize Core Display
 pygame.init()
-
 screen = pygame.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
 pygame.display.set_caption('PyClicker')
 
+# Import Assets and Menus contextually
+import assets as ast
+import menus
+
+# Fonts
 FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE)
 SCORE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 50)
-MENU_TITLE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 50)
+MENU_TITLE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 20)
 
 font_colour = pygame.Color('black')
 
@@ -25,8 +28,8 @@ dark_mode = False
 light_mode = True
 
 clock = pygame.time.Clock()
-
 running = True
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -60,9 +63,10 @@ while running:
                         ast.one_hundred_score_mark.play()
 
                 elif ast.reset_img_rect.collidepoint(event.pos):
-                    ast.reset_sound.play()
-                    score = 0
-                    sf.save_score(cfg.SCORE_FILE, score)
+                    ast.toggle.play()
+                    ast.broke.play()
+                    previous_state = cfg.STATE_GAME
+                    current_state = cfg.STATE_RESET_SCORE
 
                 elif ast.light_img_rect.collidepoint(event.pos):
                     light_mode = True
@@ -107,21 +111,35 @@ while running:
 
             elif current_state == cfg.STATE_BROKE:
                 if ast.no_img_rect.collidepoint(event.pos):
-                    current_state = cfg.STATE_GAME
+                    current_state = cfg.STATE_SHOP
 
             elif current_state == cfg.STATE_SHOP:
-                if ast.shop_button_rect.collidepoint(event.pos):
-                    if score >= 1:
-                        ast.purchase.play()
-                        cfg.CLICK_POWER += 1
-                        score -= 1
+                if ast.home_img_rect.collidepoint(event.pos):
+                    ast.toggle.play()
+                    current_state = cfg.STATE_GAME
 
-                    else:
-                        previous_state = cfg.STATE_SHOP
-                        ast.broke.play()
-                        current_state = cfg.STATE_BROKE
+                for item in ast.shop_items:
+                    if item["rect"].collidepoint(event.pos):
+                        if score >= item["cost"]:
+                            ast.purchase.play()
+                            cfg.CLICK_POWER += item["power_increase"]
+                            score -= item["cost"]
+                            sf.save_score(cfg.SCORE_FILE, score)
+                        else:
+                            ast.broke.play()
 
+            elif current_state == cfg.STATE_RESET_SCORE:
+                if ast.yes_img_rect.collidepoint(event.pos):
+                    ast.reset_sound.play()
+                    score = 0
+                    sf.save_score(cfg.SCORE_FILE, score)
+                    current_state = cfg.STATE_GAME
 
+                elif ast.back_img_rect.collidepoint(event.pos):
+                    ast.toggle.play()
+                    current_state = cfg.STATE_GAME
+
+    # Theme Settings
     if light_mode:
         cfg.BG_COLOUR = cfg.LIGHT_MODE_BG_COLOUR
         font_colour = pygame.Color('black')
@@ -129,6 +147,7 @@ while running:
         cfg.BG_COLOUR = cfg.DARK_MODE_BG_COLOUR
         font_colour = pygame.Color('white')
 
+    # View Rendering
     if current_state == cfg.STATE_GAME:
         screen.fill(cfg.BG_COLOUR)
         screen.blit(ast.python_icon, ast.img_rect)
@@ -151,10 +170,13 @@ while running:
         menus.draw_home(screen, FONT)
 
     elif current_state == cfg.STATE_SHOP:
-        menus.draw_shop(screen, MENU_TITLE_FONT, FONT)
+        menus.draw_shop(screen, MENU_TITLE_FONT, FONT, score)
 
     elif current_state == cfg.STATE_BROKE:
         menus.draw_not_enough_points(screen, FONT)
+
+    elif current_state == cfg.STATE_RESET_SCORE:
+        menus.draw_reset_confirmation(screen, FONT)
 
     pygame.display.flip()
     clock.tick(cfg.FPS)

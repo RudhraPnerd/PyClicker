@@ -2,75 +2,57 @@ import pygame
 import configs as cfg
 
 pygame.init()
-pygame.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
+pygame.mixer.init()
 
-def get_rounded_image(image, corner_radius):
-    rect = image.get_rect()
-    mask_surface = pygame.Surface(rect.size, pygame.SRCALPHA)
-    pygame.draw.rect(mask_surface, (255, 255, 255, 255), rect, border_radius=corner_radius)
-    rounded_image = image.copy()
-    rounded_image.blit(mask_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MIN)
-    return rounded_image
+# --- DIMENSIONS ---
+MAIN_ICON_SIZE = (220, 220)
+TOP_BAR_ICON_SIZE = (44, 44)
+BOTTOM_BAR_ICON_SIZE = (54, 54)
+ACTION_BUTTON_SIZE = (140, 140)
 
-# --- Main Clicker Icon ---
-python_icon = pygame.image.load(cfg.PYTHON_ICON_FILE).convert_alpha()
-python_icon = pygame.transform.scale(python_icon, (150, 150))
-python_icon = get_rounded_image(python_icon, corner_radius=25)
+# Helper function to load and scale images cleanly
+def load_and_scale(file_path, dimensions):
+    img = pygame.image.load(file_path).convert_alpha()
+    return pygame.transform.smoothscale(img, dimensions)
+
+# --- 1. GAMEPLAY ICON (CENTER) ---
+python_icon = load_and_scale(cfg.PYTHON_ICON_FILE, MAIN_ICON_SIZE)
 img_rect = python_icon.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2))
 
-# --- UI Header Buttons ---
-reset_score_button = pygame.image.load(cfg.RESET_SCORE_BUTTON_FILE).convert_alpha()
-reset_score_button = pygame.transform.scale(reset_score_button, (80, 40))
-reset_score_button = get_rounded_image(reset_score_button, corner_radius=10)
-reset_img_rect = reset_score_button.get_rect(topright=(cfg.SCREEN_WIDTH - 80, 20))
+# --- 2. TOP BAR BUTTONS ---
+dark_mode_toggle = load_and_scale(cfg.DARK_MODE_FILE, TOP_BAR_ICON_SIZE)
+dark_img_rect = dark_mode_toggle.get_rect(topleft=(20, 20))
 
-dark_mode_toggle = pygame.image.load(cfg.DARK_MODE_FILE).convert_alpha()
-dark_mode_toggle = pygame.transform.scale(dark_mode_toggle, (40, 40))
-dark_mode_toggle = get_rounded_image(dark_mode_toggle, corner_radius=10)
-dark_img_rect = dark_mode_toggle.get_rect(topright=(cfg.SCREEN_WIDTH - 20, 20))
+light_mode_toggle = load_and_scale(cfg.LIGHT_MODE_FILE, TOP_BAR_ICON_SIZE)
+light_img_rect = light_mode_toggle.get_rect(topleft=(74, 20))  # Offset by width + 10px spacing
 
-light_mode_toggle = pygame.image.load(cfg.LIGHT_MODE_FILE).convert_alpha()
-light_mode_toggle = pygame.transform.scale(light_mode_toggle, (40, 40))
-light_mode_toggle = get_rounded_image(light_mode_toggle, corner_radius=10)
-light_img_rect = light_mode_toggle.get_rect(topleft=(20, 20))
+reset_score_button = load_and_scale(cfg.RESET_SCORE_BUTTON_FILE, TOP_BAR_ICON_SIZE)
+reset_img_rect = reset_score_button.get_rect(topright=(cfg.SCREEN_WIDTH - 20, 20))
 
-power_button = pygame.image.load(cfg.POWER_BUTTON_FILE).convert_alpha()
-power_button = pygame.transform.scale(power_button, (40, 40))
-power_button = get_rounded_image(power_button, corner_radius=10)
-power_img_rect = power_button.get_rect(topleft=(70, 20))
+# --- 3. BOTTOM BAR NAVIGATION ---
+shopping_button = load_and_scale(cfg.SHOPPING_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
+shopping_img_rect = shopping_button.get_rect(topleft=(20, cfg.SCREEN_HEIGHT - 74))
 
-shopping_button = pygame.image.load(cfg.SHOPPING_BUTTON_FILE).convert_alpha()
-shopping_button = pygame.transform.scale(shopping_button, (80, 40))
-shopping_button = get_rounded_image(shopping_button, corner_radius=10)
-shopping_img_rect = shopping_button.get_rect(topleft=(120, 20))
+home_button = load_and_scale(cfg.HOME_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
+home_img_rect = home_button.get_rect(topleft=(84, cfg.SCREEN_HEIGHT - 74))  # Offset by width + 10px spacing
 
-home_button = pygame.image.load(cfg.HOME_BUTTON_FILE).convert_alpha()
-home_button = pygame.transform.scale(home_button, (80, 40))
-home_button = get_rounded_image(home_button, corner_radius=10)
-home_img_rect = home_button.get_rect(topright=(cfg.SCREEN_WIDTH - 185, 20))
+power_button = load_and_scale(cfg.POWER_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
+power_img_rect = power_button.get_rect(topright=(cfg.SCREEN_WIDTH - 20, cfg.SCREEN_HEIGHT - 74))
 
-# --- Shutdown Menu Buttons ---
-yes_button = pygame.image.load(cfg.YES_BUTTON_FILE).convert_alpha()
-yes_button = pygame.transform.scale(yes_button, (100, 100))
-yes_button = get_rounded_image(yes_button, corner_radius=10)
-yes_img_rect = yes_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 - 60, cfg.SCREEN_HEIGHT // 2 + 50))
+# --- 4. ACTION / MODAL BUTTONS ---
+play_button = load_and_scale(cfg.PLAY_BUTTON_FILE, ACTION_BUTTON_SIZE)
+play_img_rect = play_button.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2 + 60))
 
-no_button = pygame.image.load(cfg.NO_BUTTON_FILE).convert_alpha()
-no_button = pygame.transform.scale(no_button, (100, 100))
-no_button = get_rounded_image(no_button, corner_radius=10)
-no_img_rect = no_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 + 60, cfg.SCREEN_HEIGHT // 2 + 50))
+yes_button = load_and_scale(cfg.YES_BUTTON_FILE, ACTION_BUTTON_SIZE)
+yes_img_rect = yes_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 + 80, cfg.SCREEN_HEIGHT // 2 + 60))
 
-# --- Home Menu Buttons ---
-play_button = pygame.image.load(cfg.PLAY_BUTTON_FILE).convert_alpha()
-play_button = pygame.transform.scale(play_button, (100, 100))
-play_button = get_rounded_image(play_button, corner_radius=10)
-play_img_rect = play_button.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2))
+no_button = load_and_scale(cfg.EXIT_BUTTON_FILE, ACTION_BUTTON_SIZE)
+no_img_rect = no_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 + 80, cfg.SCREEN_HEIGHT // 2 + 60))
 
-# --- Shop Menu Buttons ---
-rect_x, rect_y, rect_w, rect_h = 50, 100, 200, 60
-shop_button_rect = pygame.Rect(rect_x, rect_y, rect_w, rect_h)
+back_button = load_and_scale(cfg.BACK_BUTTON_FILE, ACTION_BUTTON_SIZE)
+back_img_rect = back_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 - 80, cfg.SCREEN_HEIGHT // 2 + 60))
 
-# --- Audio Assets ---
+# --- 5. AUDIO ASSETS ---
 click_sound = pygame.mixer.Sound(cfg.CLICK_SOUND_EFFECT_FILE)
 reset_sound = pygame.mixer.Sound(cfg.RESET_SOUND_EFFECT_FILE)
 one_hundred_score_mark = pygame.mixer.Sound(cfg.ONE_HUNDRED_SCORE_MARK_FILE)
@@ -79,3 +61,33 @@ power_off = pygame.mixer.Sound(cfg.POWER_OFF_SOUND_FILE)
 teleportation_sound = pygame.mixer.Sound(cfg.TELEPORTATION_SOUND_EFFECT_FILE)
 purchase = pygame.mixer.Sound(cfg.PURCHASE_SOUND_EFFECT_FILE)
 broke = pygame.mixer.Sound(cfg.BROKE_SOUND_EFFECT_FILE)
+
+# --- 6. SHOP ITEMS LAYOUT ---
+item_width = 300
+item_height = 55
+start_y = 150
+spacing = 70
+
+shop_items = [
+    {
+        "id": "power_1",
+        "name": "+1 CLICK POWER",
+        "cost": 10,
+        "power_increase": 1,
+        "rect": pygame.Rect(cfg.SCREEN_WIDTH // 2 - item_width // 2, start_y, item_width, item_height)
+    },
+    {
+        "id": "power_2",
+        "name": "+5 CLICK POWER",
+        "cost": 50,
+        "power_increase": 5,
+        "rect": pygame.Rect(cfg.SCREEN_WIDTH // 2 - item_width // 2, start_y + spacing, item_width, item_height)
+    },
+    {
+        "id": "power_3",
+        "name": "+25 CLICK POWER",
+        "cost": 200,
+        "power_increase": 25,
+        "rect": pygame.Rect(cfg.SCREEN_WIDTH // 2 - item_width // 2, start_y + (spacing * 2), item_width, item_height)
+    }
+]
