@@ -17,9 +17,7 @@ def draw_shutting_down_confirmation(screen, font):
     prompt_rect = prompt.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2 - 20))
     screen.blit(prompt, prompt_rect)
 
-    screen.blit(ast.yes_button, ast.yes_img_rect)
-    screen.blit(ast.no_button, ast.no_img_rect)
-
+    screen.blit(ast.exit_button, ast.exit_img_rect)
 
 def draw_home(screen, font):
     screen.fill(cfg.BG_COLOUR)

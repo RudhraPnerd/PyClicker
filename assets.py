@@ -10,6 +10,7 @@ TOP_BAR_ICON_SIZE = (44, 44)
 BOTTOM_BAR_ICON_SIZE = (54, 54)
 ACTION_BUTTON_SIZE = (140, 140)
 
+
 # Helper function to load and scale images cleanly
 def load_and_scale(file_path, dimensions):
     img = pygame.image.load(file_path).convert_alpha()
@@ -34,10 +35,16 @@ shopping_button = load_and_scale(cfg.SHOPPING_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
 shopping_img_rect = shopping_button.get_rect(topleft=(20, cfg.SCREEN_HEIGHT - 74))
 
 home_button = load_and_scale(cfg.HOME_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
-home_img_rect = home_button.get_rect(topleft=(84, cfg.SCREEN_HEIGHT - 74))  # Offset by width + 10px spacing
+home_img_rect = home_button.get_rect(topleft=(84, cfg.SCREEN_HEIGHT - 74))
 
 power_button = load_and_scale(cfg.POWER_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
 power_img_rect = power_button.get_rect(topright=(cfg.SCREEN_WIDTH - 20, cfg.SCREEN_HEIGHT - 74))
+
+mute_button = load_and_scale(cfg.MUTE_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
+mute_img_rect = mute_button.get_rect(topleft=(665, cfg.SCREEN_HEIGHT - 74))
+
+unmute_button = load_and_scale(cfg.UNMUTE_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
+unmute_img_rect = unmute_button.get_rect(topleft=(645, cfg.SCREEN_HEIGHT - 74))
 
 # --- 4. ACTION / MODAL BUTTONS ---
 play_button = load_and_scale(cfg.PLAY_BUTTON_FILE, ACTION_BUTTON_SIZE)
@@ -62,7 +69,11 @@ teleportation_sound = pygame.mixer.Sound(cfg.TELEPORTATION_SOUND_EFFECT_FILE)
 purchase = pygame.mixer.Sound(cfg.PURCHASE_SOUND_EFFECT_FILE)
 broke = pygame.mixer.Sound(cfg.BROKE_SOUND_EFFECT_FILE)
 
-# --- 6. SHOP ITEMS LAYOUT ---
+# --- 6. SHUTTING DOWN MENU BUTTONS ---
+exit_button = load_and_scale(cfg.EXIT_BUTTON_FILE, ACTION_BUTTON_SIZE)
+exit_img_rect = exit_button.get_rect(center=(cfg.SCREEN_WIDTH // 2 - 80, cfg.SCREEN_HEIGHT // 2 + 60))
+
+# --- 7. SHOP ITEMS LAYOUT ---
 item_width = 300
 item_height = 55
 start_y = 150
@@ -91,3 +102,16 @@ shop_items = [
         "rect": pygame.Rect(cfg.SCREEN_WIDTH // 2 - item_width // 2, start_y + (spacing * 2), item_width, item_height)
     }
 ]
+
+ALL_SOUNDS = [
+    click_sound, reset_sound,
+    one_hundred_score_mark, toggle,
+    power_off, teleportation_sound,
+    purchase, broke,
+]
+
+
+
+def set_sound_volume(volume_level):
+    for sound in ALL_SOUNDS:
+        sound.set_volume(volume_level)

@@ -3,16 +3,13 @@ import pygame
 import configs as cfg
 import score_func as sf
 
-# Initialize Core Display
 pygame.init()
 screen = pygame.display.set_mode((cfg.SCREEN_WIDTH, cfg.SCREEN_HEIGHT))
 pygame.display.set_caption('PyClicker')
 
-# Import Assets and Menus contextually
 import assets as ast
 import menus
 
-# Fonts
 FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE)
 SCORE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 50)
 MENU_TITLE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 20)
@@ -23,6 +20,8 @@ current_state = cfg.STATE_HOME
 previous_state = cfg.STATE_HOME
 
 score = sf.read_score(cfg.SCORE_FILE)
+
+is_muted = False
 
 dark_mode = False
 light_mode = True
@@ -92,11 +91,11 @@ while running:
                     ast.toggle.play()
                     current_state = cfg.STATE_HOME
 
-            elif current_state == cfg.STATE_SHUTTING_DOWN:
-                if ast.yes_img_rect.collidepoint(event.pos):
-                    ast.power_off.play()
-                    time.sleep(1)
-                    running = False
+                elif ast.mute_img_rect.collidepoint(event.pos):
+                    ast.toggle.play()
+                    time.sleep(1.5)
+                    ast.set_sound_volume(0.0)
+
                 elif ast.no_img_rect.collidepoint(event.pos):
                     ast.toggle.play()
                     current_state = previous_state
@@ -139,7 +138,12 @@ while running:
                     ast.toggle.play()
                     current_state = cfg.STATE_GAME
 
-    # Theme Settings
+            elif current_state == cfg.STATE_SHUTTING_DOWN:
+                if ast.exit_img_rect.collidepoint(event.pos):
+                    ast.power_off.play()
+                    time.sleep(1.2)
+                    running = False
+
     if light_mode:
         cfg.BG_COLOUR = cfg.LIGHT_MODE_BG_COLOUR
         font_colour = pygame.Color('black')
@@ -162,6 +166,7 @@ while running:
         screen.blit(ast.power_button, ast.power_img_rect)
         screen.blit(ast.shopping_button, ast.shopping_img_rect)
         screen.blit(ast.home_button, ast.home_img_rect)
+        screen.blit(ast.mute_button, ast.mute_img_rect)
 
     elif current_state == cfg.STATE_SHUTTING_DOWN:
         menus.draw_shutting_down_confirmation(screen, FONT)
