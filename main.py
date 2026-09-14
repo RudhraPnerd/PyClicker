@@ -12,6 +12,7 @@ pygame.display.set_caption('PyClicker')
 
 FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE)
 SCORE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 50)
+MENU_TITLE_FONT = pygame.font.Font(cfg.FONT_NAME, cfg.FONT_SIZE + 50)
 
 font_colour = pygame.Color('black')
 
@@ -80,6 +81,7 @@ while running:
 
                 elif ast.shopping_img_rect.collidepoint(event.pos):
                     ast.toggle.play()
+                    previous_state = cfg.STATE_GAME
                     current_state = cfg.STATE_SHOP
 
                 elif ast.home_img_rect.collidepoint(event.pos):
@@ -102,6 +104,23 @@ while running:
                     ast.teleportation_sound.play()
                     previous_state = cfg.STATE_HOME
                     current_state = cfg.STATE_GAME
+
+            elif current_state == cfg.STATE_BROKE:
+                if ast.no_img_rect.collidepoint(event.pos):
+                    current_state = cfg.STATE_GAME
+
+            elif current_state == cfg.STATE_SHOP:
+                if ast.shop_button_rect.collidepoint(event.pos):
+                    if score >= 1:
+                        ast.purchase.play()
+                        cfg.CLICK_POWER += 1
+                        score -= 1
+
+                    else:
+                        previous_state = cfg.STATE_SHOP
+                        ast.broke.play()
+                        current_state = cfg.STATE_BROKE
+
 
     if light_mode:
         cfg.BG_COLOUR = cfg.LIGHT_MODE_BG_COLOUR
@@ -130,6 +149,12 @@ while running:
 
     elif current_state == cfg.STATE_HOME:
         menus.draw_home(screen, FONT)
+
+    elif current_state == cfg.STATE_SHOP:
+        menus.draw_shop(screen, MENU_TITLE_FONT, FONT)
+
+    elif current_state == cfg.STATE_BROKE:
+        menus.draw_not_enough_points(screen, FONT)
 
     pygame.display.flip()
     clock.tick(cfg.FPS)

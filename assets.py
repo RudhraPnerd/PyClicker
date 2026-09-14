@@ -66,6 +66,10 @@ play_button = pygame.transform.scale(play_button, (100, 100))
 play_button = get_rounded_image(play_button, corner_radius=10)
 play_img_rect = play_button.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2))
 
+# --- Shop Menu Buttons ---
+rect_x, rect_y, rect_w, rect_h = 50, 100, 200, 60
+shop_button_rect = pygame.Rect(rect_x, rect_y, rect_w, rect_h)
+
 # --- Audio Assets ---
 click_sound = pygame.mixer.Sound(cfg.CLICK_SOUND_EFFECT_FILE)
 reset_sound = pygame.mixer.Sound(cfg.RESET_SOUND_EFFECT_FILE)
@@ -73,3 +77,5 @@ one_hundred_score_mark = pygame.mixer.Sound(cfg.ONE_HUNDRED_SCORE_MARK_FILE)
 toggle = pygame.mixer.Sound(cfg.DARK_LIGHT_MODE_TOGGLE_SOUND_EFFECT_FILE)
 power_off = pygame.mixer.Sound(cfg.POWER_OFF_SOUND_FILE)
 teleportation_sound = pygame.mixer.Sound(cfg.TELEPORTATION_SOUND_EFFECT_FILE)
+purchase = pygame.mixer.Sound(cfg.PURCHASE_SOUND_EFFECT_FILE)
+broke = pygame.mixer.Sound(cfg.BROKE_SOUND_EFFECT_FILE)
