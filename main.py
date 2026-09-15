@@ -21,6 +21,7 @@ previous_state = cfg.STATE_HOME
 
 score = sf.read_score(cfg.SCORE_FILE)
 
+
 is_muted = False
 
 dark_mode = False
@@ -92,9 +93,15 @@ while running:
                     current_state = cfg.STATE_HOME
 
                 elif ast.mute_img_rect.collidepoint(event.pos):
-                    ast.toggle.play()
-                    time.sleep(1.5)
-                    ast.set_sound_volume(0.0)
+                    if not is_muted:
+                        ast.toggle.play()
+                        time.sleep(1.5)
+                        ast.set_sound_volume(0.0)
+                        is_muted = True
+
+                    elif is_muted:
+                        ast.set_sound_volume(1.0)
+                        is_muted = False
 
                 elif ast.no_img_rect.collidepoint(event.pos):
                     ast.toggle.play()

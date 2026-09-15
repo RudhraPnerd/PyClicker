@@ -43,9 +43,6 @@ power_img_rect = power_button.get_rect(topright=(cfg.SCREEN_WIDTH - 20, cfg.SCRE
 mute_button = load_and_scale(cfg.MUTE_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
 mute_img_rect = mute_button.get_rect(topleft=(665, cfg.SCREEN_HEIGHT - 74))
 
-unmute_button = load_and_scale(cfg.UNMUTE_BUTTON_FILE, BOTTOM_BAR_ICON_SIZE)
-unmute_img_rect = unmute_button.get_rect(topleft=(645, cfg.SCREEN_HEIGHT - 74))
-
 # --- 4. ACTION / MODAL BUTTONS ---
 play_button = load_and_scale(cfg.PLAY_BUTTON_FILE, ACTION_BUTTON_SIZE)
 play_img_rect = play_button.get_rect(center=(cfg.SCREEN_WIDTH // 2, cfg.SCREEN_HEIGHT // 2 + 60))
